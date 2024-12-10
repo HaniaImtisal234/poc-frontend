@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 import Header from "../../components/Header/Header.jsx";
 import AppFooter from "../../components/Footer/Footer.jsx";
+import DashboardRouter from "../../routes/DashboardRouter.jsx";
+import EmailSection from "../EmailApproval/EmailApproval.jsx";
 
 const { Content } = Layout;
 
@@ -23,8 +25,9 @@ const HomePage = () => {
 
         <Layout>
           <Header />
-          <Content className="mx-4 my-2 ">
-            <h1>hello</h1>
+          <Content className="mx-4 my-2" style={{ backgroundColor: "white" }}>
+            {/* <DashboardRouter /> */}
+            <EmailSection />
           </Content>
           <AppFooter />
         </Layout>

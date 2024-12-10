@@ -1,5 +1,6 @@
 import EmailIcon from "@mui/icons-material/Email";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { EMAIL_APPROVAL_PAGE } from "./Routes";
 export const MenuItems = [
   {
     key: "first",
@@ -29,21 +30,21 @@ export const MenuItems = [
         9/10/2024
       </div>
     ),
-    route: "/backoffice/users",
+    route: { EMAIL_APPROVAL_PAGE },
     icon: <CalendarMonthIcon style={{ fontSize: "20px", color: "white" }} />,
     subItems: [
       {
         key: "second",
         label: <div className="text-white">Email 1</div>,
         title: "Email 1",
-        route: "/backoffice/users",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
       {
         key: "third",
         label: <div className="text-white">Email 2</div>,
         title: "Email 2",
-        route: "/backoffice/users/therapists",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
     ],
@@ -76,21 +77,21 @@ export const MenuItems = [
         10/10/2024
       </div>
     ),
-    route: "/backoffice/users",
+    route: { EMAIL_APPROVAL_PAGE },
     icon: <CalendarMonthIcon style={{ fontSize: "20px", color: "white" }} />,
     subItems: [
       {
         key: "fifth",
         label: <div className="text-white">Email 1</div>,
         title: "Email 1",
-        route: "/backoffice/users",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
       {
         key: "sixth",
         label: <div className="text-white">Email 2</div>,
         title: "Email 2",
-        route: "/backoffice/users/therapists",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
     ],
@@ -123,21 +124,21 @@ export const MenuItems = [
         11/10/2024
       </div>
     ),
-    route: "/backoffice/users",
+    route: { EMAIL_APPROVAL_PAGE },
     icon: <CalendarMonthIcon style={{ fontSize: "20px", color: "white" }} />,
     subItems: [
       {
         key: "eighth",
         label: <div className="text-white">Email 1</div>,
         title: "Email 1",
-        route: "/backoffice/users",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
       {
         key: "ninth",
         label: <div className="text-white">Email 2</div>,
         title: "Email 2",
-        route: "/backoffice/users/therapists",
+        route: { EMAIL_APPROVAL_PAGE },
         icon: <EmailIcon style={{ fontSize: "20px", color: "white" }} />,
       },
     ],
