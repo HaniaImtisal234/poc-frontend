@@ -10,10 +10,9 @@ module.exports = {
         lg: "1024px",
       },
       colors: {
-        "sea-salt": "#FFFFFF",
         "light-blue": "#ADD8E6",
         "gray-blue": "#00356b",
-        "gray-dark": "#F2F5F7",
+        "gray-dark": "#e4e9ed",
         "yale-blue": "#000000",
         "carolina-blue": "#7BAFD4",
         "prussian-blue": "#003153",

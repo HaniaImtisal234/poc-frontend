@@ -25,7 +25,7 @@ const HomePage = () => {
 
         <Layout>
           <Header />
-          <Content className="mx-4 my-2 bg-white">
+          <Content className="mx-4 my-2" style={{ backgroundColor: "white" }}>
             {/* <DashboardRouter /> */}
             <EmailSection />
           </Content>

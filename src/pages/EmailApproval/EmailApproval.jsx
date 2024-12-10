@@ -1,8 +1,12 @@
 import React from "react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const handleClick = () => {
+  toast.success("Button clicked successfully!");
+};
 const EmailSection = () => {
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen">
       <div className="flex h-4/5">
         <div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center border-gray-300">
           <h1 className="text-2xl font-semibold mb-3">Email</h1>
@@ -19,11 +23,17 @@ const EmailSection = () => {
         </div>
       </div>
 
-      <div className="h-1/5 flex justify-end items-center bg-gray-100 space-x-4 pr-4">
-        <button className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition">
+      <div className="h-1/5 flex justify-end items-center bg-gray-100 space-x-4 pr-20">
+        <button
+          className="bg-black text-white px-6 py-2 rounded-lg shadow hover:bg-gray-600 transition"
+          onClick={handleClick}
+        >
           Approve
         </button>
-        <button className="bg-red-500 text-white px-6 py-2 rounded-lg shadow hover:bg-red-600 transition">
+        <button
+          className="bg-black text-white px-6 py-2 rounded-lg shadow hover:bg-gray-600 transition"
+          onClick={handleClick}
+        >
           Disapprove
         </button>
       </div>
