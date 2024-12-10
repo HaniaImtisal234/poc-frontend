@@ -2,7 +2,7 @@ import React from "react";
 
 const EmailSection = () => {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-white">
       <div className="flex h-4/5">
         <div className="w-1/2 bg-gray-100 flex flex-col justify-center items-center border-gray-300">
           <h1 className="text-2xl font-semibold mb-3">Email</h1>
