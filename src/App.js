@@ -1,13 +1,8 @@
 import "./App.css";
+import AppRouter from "./routes/AppRouter";
 
 function App() {
-  return (
-    <div className="bg-red-500">
-      <header className="">
-        <h1>hello</h1>
-      </header>
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;

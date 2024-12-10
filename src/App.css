@@ -1,0 +1,135 @@
+/* Ant Design Overriden Classes */
+#custom-dashboard .ant-layout-sider {
+  background-color: #000000;
+}
+
+#custom-sidebar .ant-menu-item-active {
+  background-color: #7bafd4;
+}
+
+#custom-sidebar .ant-menu-item-selected {
+  background-color: #7bafd4;
+}
+#custom-sidebar
+  :where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title,
+:where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light
+  > .ant-menu
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: #ffffff;
+}
+
+#custom-menu .ant-menu-submenu-arrow::before {
+  background-color: #ffffff;
+}
+#custom-menu .ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+  background-color: #ffffff;
+}
+
+.ant-btn .ant-btn-primary {
+  background-color: #00356b;
+}
+
+.css-dev-only-do-not-override-6j9yrn .ant-btn-primary {
+  background-color: #00356b;
+}
+.ant-modal-confirm-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100px;
+}
+
+#LicenseeImage .ant-image-mask {
+  height: 50px;
+  border-radius: 2px;
+}
+#PreviewModal .ant-modal-confirm .ant-modal-confirm-titl {
+  color: #00356b;
+}
+#LicenseeImage .ant-image-img .css-dev-only-do-not-override-6j9yrn {
+  font-size: large;
+}
+#LicenseeImage .ant-image-mask-info {
+  color: white;
+  font-size: large;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: #808080;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light.ant-menu-submenu
+  > .ant-menu,
+:where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light
+  > .ant-menu.ant-menu-submenu
+  > .ant-menu {
+  background-color: #00356b;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light
+  .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-6j9yrn).ant-menu-light
+  > .ant-menu
+  .ant-menu-item-selected {
+  background-color: #7bafd4;
+  padding-left: 0px;
+}
+:where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-date-panel
+  .ant-picker-body {
+  padding: 0px 0px;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-date-panel {
+  width: 250px;
+}
+.ant-picker-date-panel
+  :where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-date-panel {
+  padding: 2px;
+  width: 250px;
+}
+.ant-picker-header
+  :where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-header {
+  padding: 2px;
+}
+:where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-date-panel {
+  line-height: 28px;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-picker-dropdown
+  .ant-picker-cell {
+  padding: 2px;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-form-item
+  .ant-form-item-label
+  > label {
+  color: #00356b;
+}
