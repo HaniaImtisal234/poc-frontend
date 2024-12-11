@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import LeftSidebar from "../FirstSidebar/FirstSidebar";
 import RightSidebar from "../SecondSidebar/SecondSidebar";
 import axios from "axios";
+import EmailSection from "../../pages/EmailApproval/EmailApproval"; // Import the EmailSection component
 
-const apiUrl = "/get_emails?per_page=1";
+const apiUrl = "/get_emails?per_page=5";
 
 async function getEmails() {
   try {
@@ -12,58 +13,76 @@ async function getEmails() {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data.data);
-    return response?.data?.data;
+    return response?.data?.data || [];
   } catch (error) {
     console.error("Error:", error.message);
     return [];
   }
 }
 
-const Sidebar = ({ menuItems }) => {
+const Sidebar = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
-  const [isLeftSidebarCollapsed, setIsLeftSidebarCollapsed] = useState(false);
-  const [emailDates, setEmailDates] = useState([]); // State to hold created_at dates
+  const [groupedEmails, setGroupedEmails] = useState({});
+  const [emailDates, setEmailDates] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState(null); // Store the selected email
 
   useEffect(() => {
-    // Fetch emails and set the created_at dates
-    async function fetchEmails() {
+    const fetchEmails = async () => {
       const emails = await getEmails();
-      const dates = emails.map((email) => email.created_at); // Extract the created_at field
-      setEmailDates(dates); // Set the extracted dates into state
-    }
+
+      const grouped = emails.reduce((acc, email) => {
+        const date = new Date(email.created_at).toLocaleDateString();
+        if (!acc[date]) acc[date] = [];
+        acc[date].push(email);
+        return acc;
+      }, {});
+
+      const dates = Object.keys(grouped);
+
+      setGroupedEmails(grouped);
+      setEmailDates(dates);
+    };
 
     fetchEmails();
-  }, []); // Empty dependency array ensures it runs only once after the component mounts
+  }, []);
 
   const handleLeftSidebarClick = (menuKey) => {
     setSelectedMenuItem(menuKey);
     setIsRightSidebarOpen(true);
-    setIsLeftSidebarCollapsed(true);
+  };
+
+  const handleRightSidebarClick = (emailId) => {
+    const email = groupedEmails[selectedMenuItem].find(
+      (email) => email.id === emailId
+    );
+    console.log("🚀 ~ handleRightSidebarClick ~ email:", email);
+    setSelectedEmail(email);
   };
 
   const handleCloseRightSidebar = () => {
     setIsRightSidebarOpen(false);
     setSelectedMenuItem(null);
-    setIsLeftSidebarCollapsed(false);
+
+    setSelectedEmail(null);
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex ">
       <LeftSidebar
-        menuItems={menuItems}
         onMenuClick={handleLeftSidebarClick}
-        collapsed={isLeftSidebarCollapsed}
-        emailDates={emailDates} // Pass the email dates to the LeftSidebar component
+        emailDates={emailDates}
       />
 
       {isRightSidebarOpen && (
         <RightSidebar
-          menuKey={selectedMenuItem}
+          emails={groupedEmails[selectedMenuItem] || []}
+          onEmailClick={handleRightSidebarClick}
           onClose={handleCloseRightSidebar}
         />
       )}
+
+      {selectedEmail && <EmailSection selectedEmail={selectedEmail} />}
     </div>
   );
 };
