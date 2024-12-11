@@ -16,21 +16,9 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="" id="custom-dashboard">
-      <Layout className="min-h-[100vh]">
-        <Sidebar
-          className="bg-yale-blue sticky top-0 z-10"
-          menuItems={MenuItems}
-        />
-
-        <Layout>
-          <Header />
-          <Content className="mx-4 my-2" style={{ backgroundColor: "white" }}>
-            {/* <DashboardRouter /> */}
-            <EmailSection />
-          </Content>
-          <AppFooter />
-        </Layout>
+    <div className="h-screen" id="custom-dashboard">
+      <Layout className="">
+        <Sidebar className="bg-yale-blue sticky top-0 z-10" />
       </Layout>
     </div>
   );

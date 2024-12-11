@@ -152,3 +152,12 @@
   background-color: #94a3b8 !important;
   color: white !important;
 }
+
+/* Add to your global CSS or a scoped CSS file */
+.ant-menu-item {
+  color: white !important; /* Ensures all menu items have white text */
+}
+
+.ant-menu-item-selected {
+  color: white !important; /* Ensures selected menu item text is also white */
+}
