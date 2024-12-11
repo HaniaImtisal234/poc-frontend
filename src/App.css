@@ -133,3 +133,22 @@
   > label {
   color: #00356b;
 }
+
+.ant-layout-sider-trigger {
+  background-color: #000000 !important; /* Change this to your desired color */
+  color: white !important; /* Ensure text or icon color is white */
+}
+.ant-menu-submenu-arrow {
+  color: white !important; /* Ensures the arrow icon is white */
+}
+
+.ant-menu-item-selected {
+  background-color: #94a3b8 !important; /* or any other color */
+  color: white !important; /* Ensures the text color is white */
+}
+
+/* Optional: Change the color when hovering over selected item */
+.ant-menu-item-selected:hover {
+  background-color: #94a3b8 !important;
+  color: white !important;
+}
