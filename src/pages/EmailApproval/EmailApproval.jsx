@@ -323,7 +323,7 @@ const EmailSection = ({ selectedEmail }) => {
     }
   }, [selectedEmail]);
 
-  console.log("Email Content:", emailContent);
+  console.log("Email Content:", emailContent.body);
 
   const handleClick = () => {
     toast.success("Button clicked successfully!");
@@ -346,15 +346,26 @@ const EmailSection = ({ selectedEmail }) => {
   }
 
   return (
-    <div className="h-screen" style={{ height: "130vh" }}>
-      <h1 className="text-center text-3xl font-bold mt-8 mb-4">
-        Email Approvals
-      </h1>
-
+    <div className="max-w-7xl w-full mx-auto p-8 pl-24">
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
+        <h1 className="text-center text-3xl font-bold mt-8 mb-8">
+          {emailContent.subject}
+        </h1>
+
         <div className="w-full bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-4">
-          <h1 className="text-3xl font-semibold mb-4 text-gray-800">Email</h1>
-          <div className="w-full bg-gray-50 p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <h1 className="text-3xl font-semibold mb-4 text-gray-800">Prompt</h1>
+          <div className="w-full bg-gray-50 p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-x-auto break-words">
+            <p className="text-gray-700 text-lg">
+              {"Write your prompt here..."}
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-4">
+          <h1 className="text-3xl font-semibold mb-4 text-gray-800">
+            Email Body
+          </h1>
+          <div className="w-full bg-gray-50 p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-x-auto break-words">
             <p className="text-gray-700 text-lg">
               {emailContent && emailContent.body
                 ? emailContent.body
