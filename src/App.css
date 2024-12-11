@@ -135,29 +135,27 @@
 }
 
 .ant-layout-sider-trigger {
-  background-color: #000000 !important; /* Change this to your desired color */
-  color: white !important; /* Ensure text or icon color is white */
+  background-color: #000000 !important;
+  color: white !important;
 }
 .ant-menu-submenu-arrow {
-  color: white !important; /* Ensures the arrow icon is white */
+  color: white !important;
 }
 
 .ant-menu-item-selected {
-  background-color: #94a3b8 !important; /* or any other color */
-  color: white !important; /* Ensures the text color is white */
+  background-color: #94a3b8 !important;
+  color: white !important;
 }
 
-/* Optional: Change the color when hovering over selected item */
 .ant-menu-item-selected:hover {
   background-color: #94a3b8 !important;
   color: white !important;
 }
 
-/* Add to your global CSS or a scoped CSS file */
 .ant-menu-item {
-  color: white !important; /* Ensures all menu items have white text */
+  color: white !important;
 }
 
 .ant-menu-item-selected {
-  color: white !important; /* Ensures selected menu item text is also white */
+  color: white !important;
 }
