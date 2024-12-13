@@ -297,7 +297,6 @@
 // };
 
 // export default EmailSection;
-
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -322,7 +321,10 @@ console.log(selectedEmail)
     }
   }, [selectedEmail]);
 
-  console.log("Email Content:", emailContent.body);
+  console.log(
+    "Email Content:",
+    emailContent ? emailContent.body : "No content"
+  );
 
   const handleClick = () => {
     toast.success("Button clicked successfully!");
@@ -348,7 +350,9 @@ console.log(selectedEmail)
     <div className="max-w-7xl w-full mx-auto p-8 pl-24">
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
         <h1 className="text-center text-3xl font-bold mt-8 mb-8">
-          {emailContent?.subject}
+
+          {emailContent ? emailContent.subject : "No Subject"}
+
         </h1>
 
         <div className="w-full bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-4">
