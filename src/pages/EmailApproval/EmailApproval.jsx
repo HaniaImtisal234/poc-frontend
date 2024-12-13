@@ -305,21 +305,20 @@ import { Modal, Image, Row, Col } from "antd";
 import CustomButton from "../../components/CustomButton/CustomButton";
 
 const EmailSection = ({ selectedEmail }) => {
-  const [emailContent, setEmailContent] = useState(null);
+  const [emailContent, setEmailContent] = useState('');
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
+console.log(selectedEmail)
   useEffect(() => {
     if (selectedEmail && selectedEmail.email_content) {
       try {
         const parsedContent = JSON.parse(selectedEmail.email_content);
+        console.log(`${parsedContent}`)
         setEmailContent(parsedContent);
       } catch (error) {
         console.error("Error parsing email content:", error);
         setEmailContent(null);
       }
-    } else {
-      setEmailContent(null);
     }
   }, [selectedEmail]);
 
@@ -349,7 +348,7 @@ const EmailSection = ({ selectedEmail }) => {
     <div className="max-w-7xl w-full mx-auto p-8 pl-24">
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
         <h1 className="text-center text-3xl font-bold mt-8 mb-8">
-          {emailContent.subject}
+          {emailContent?.subject}
         </h1>
 
         <div className="w-full bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-4">
@@ -367,7 +366,7 @@ const EmailSection = ({ selectedEmail }) => {
           </h1>
           <div className="w-full bg-gray-50 p-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-x-auto break-words">
             <p className="text-gray-700 text-lg">
-              {emailContent && emailContent.body
+              {emailContent && emailContent?.body
                 ? emailContent.body
                 : "Write your email here..."}
             </p>
@@ -380,7 +379,7 @@ const EmailSection = ({ selectedEmail }) => {
           </h1>
           <Row gutter={16}>
             {parsedAttachments.length > 0 ? (
-              parsedAttachments.map((attachment, index) => (
+              parsedAttachments?.map((attachment, index) => (
                 <Col span={8} key={index}>
                   <Image
                     width={100}
