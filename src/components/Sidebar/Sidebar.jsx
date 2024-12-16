@@ -3,6 +3,8 @@ import LeftSidebar from "../FirstSidebar/FirstSidebar";
 import RightSidebar from "../SecondSidebar/SecondSidebar";
 import axios from "axios";
 import EmailSection from "../../pages/EmailApproval/EmailApproval"; // Import the EmailSection component
+import Users from "../../pages/Users/Users";
+import Domains from "../../pages/Domains/Domains";
 
 const apiUrl = "/get_emails?per_page=5";
 
@@ -11,6 +13,7 @@ async function getEmails() {
     const response = await axios.get(apiUrl, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
     return response?.data?.data || [];
@@ -21,7 +24,7 @@ async function getEmails() {
 }
 
 const Sidebar = () => {
-  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const [selectedMenuItem, setSelectedMenuItem] = useState("Users");
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [groupedEmails, setGroupedEmails] = useState({});
   const [emailDates, setEmailDates] = useState([]);
@@ -74,13 +77,18 @@ const Sidebar = () => {
         emailDates={emailDates}
       />
 
-      {isRightSidebarOpen && (
-        <RightSidebar
-          emails={groupedEmails[selectedMenuItem] || []}
-          onEmailClick={handleRightSidebarClick}
-          onClose={handleCloseRightSidebar}
-        />
-      )}
+      {isRightSidebarOpen &&
+        selectedMenuItem !== "Domains" &&
+        selectedMenuItem !== "Users" && (
+          <RightSidebar
+            emails={groupedEmails[selectedMenuItem] || []}
+            onEmailClick={handleRightSidebarClick}
+            onClose={handleCloseRightSidebar}
+          />
+        )}
+
+      {selectedMenuItem === "Users" && <Users />}
+      {selectedMenuItem === "Domains" && <Domains />}
 
       {selectedEmail && <EmailSection selectedEmail={selectedEmail} />}
     </div>
