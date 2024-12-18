@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -47,6 +46,7 @@ const Header = () => {
           </ul>
         </div>
         <div className="flex item-center justify-end">
+          <div className="pr-4"></div>
           <div>
             <button
               onClick={handleLogout}

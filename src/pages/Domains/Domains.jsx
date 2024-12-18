@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input, Button } from "antd";
 import axios from "axios";
 import Header from "../../components/Header/Header";
+const { TextArea } = Input;
 
 const Domains = () => {
   const [domains, setDomains] = useState([]);
@@ -252,10 +253,12 @@ const Domains = () => {
           </div>
           <div>
             <label>Domain Prompt:</label>
-            <Input
+            <TextArea
               placeholder="Enter domain prompt"
               value={domainPrompt}
               onChange={(e) => setDomainPrompt(e.target.value)}
+              rows={5}
+              className="custom-textarea"
             />
           </div>
 

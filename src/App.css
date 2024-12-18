@@ -159,3 +159,9 @@
 .ant-menu-item-selected {
   color: white !important;
 }
+
+.custom-textarea {
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 8px;
+}
