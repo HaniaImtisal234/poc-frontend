@@ -12,7 +12,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Validation function
   const validate = () => {
     const errors = {};
     if (!email) {
@@ -41,23 +40,51 @@ const Login = () => {
         email,
         password,
       });
-      if (response) {
-        toast.success("Logged In successfully!");
-      }
-      localStorage.setItem("token", response.data.token);
-      if (response.data.token) {
+
+      if (response.status === 200) {
+        toast.success("Logged in successfully!");
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("email", email);
+
         navigate("/");
+      } else {
+        toast.error("Failed to log in.");
       }
     } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Login failed. Please try again.";
+      toast.error(errorMessage);
       console.error("Login failed:", error.response?.data || error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleForgetPassword = async () => {
+    try {
+      const response = await fetch("/users/request-reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        toast.success("Password reset link has been sent to your email!");
+      } else {
+        const data = await response.json();
+        toast.error(data.message || "Failed to request password reset.");
+      }
+    } catch (error) {
+      console.error("Error requesting password reset:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
+  };
   return (
     <div className="login-container" style={styles.container}>
-      <h2>Login</h2>
+      <h1 style={styles.heading}>POC</h1>
+      <h2 style={styles.subHeading}>Login</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
           <label htmlFor="email">Email:</label>
@@ -84,6 +111,13 @@ const Login = () => {
         <button type="submit" style={styles.button} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
+        <button
+          type="button"
+          onClick={handleForgetPassword}
+          style={styles.forgetPasswordButton}
+        >
+          Forget Password?
+        </button>
       </form>
     </div>
   );
@@ -96,9 +130,21 @@ const styles = {
     padding: "20px",
     border: "1px solid #ccc",
     borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    fontFamily: "Arial, sans-serif",
-    justifyContent: "center",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    fontFamily: "'Arial', sans-serif",
+    textAlign: "center",
+    backgroundColor: "#f9f9f9",
+  },
+  heading: {
+    fontSize: "28px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+    color: "#333",
+  },
+  subHeading: {
+    fontSize: "22px",
+    marginBottom: "20px",
+    color: "#555",
   },
   form: {
     display: "flex",
@@ -106,22 +152,36 @@ const styles = {
   },
   inputGroup: {
     marginBottom: "15px",
+    textAlign: "left",
   },
   input: {
     width: "100%",
-    padding: "8px",
-    margin: "5px 0",
+    padding: "10px",
+    marginTop: "5px",
     borderRadius: "4px",
     border: "1px solid #ccc",
+    fontSize: "14px",
   },
   button: {
     padding: "10px 15px",
     border: "none",
     borderRadius: "4px",
-    backgroundColor: "black",
+    backgroundColor: "#333",
     color: "#fff",
     cursor: "pointer",
     fontSize: "16px",
+    marginTop: "10px",
+  },
+  forgetPasswordButton: {
+    padding: "10px 15px",
+    border: "none",
+    borderRadius: "4px",
+    backgroundColor: "transparent",
+    color: "#007BFF",
+    cursor: "pointer",
+    fontSize: "14px",
+    marginTop: "10px",
+    textDecoration: "underline",
   },
   error: {
     color: "red",

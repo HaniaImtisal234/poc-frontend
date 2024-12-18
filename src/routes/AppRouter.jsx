@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   DOMAIN_PAGE,
+  FORGET_PASSWORD,
   HOME_PAGE,
   LANDING_PAGE,
   LOGIN,
@@ -12,6 +13,7 @@ import Login from "../pages/Login/Login";
 import LandingPage from "../pages/Landing Page/LandingPage";
 import Domains from "../pages/Domains/Domains";
 import Users from "../pages/Users/Users";
+import ForgetPassword from "../pages/ForgetPassword/ForgetPassword";
 
 const AppRouter = () => {
   return (
@@ -23,6 +25,7 @@ const AppRouter = () => {
           <Route path={LANDING_PAGE} element={<LandingPage />} />
           <Route path={USERS} element={<Users />} />
           <Route path={DOMAIN_PAGE} element={<Domains />} />
+          <Route path={FORGET_PASSWORD} element={<ForgetPassword />} />
         </Routes>
       </BrowserRouter>
     </div>
