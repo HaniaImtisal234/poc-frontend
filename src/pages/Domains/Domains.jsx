@@ -170,7 +170,7 @@ const Domains = () => {
               handleModalVisibility(true, record);
             }}
             style={{
-              backgroundColor: "blue",
+              backgroundColor: "#2a2a2a",
               padding: "5px 15px",
               color: "white",
               marginRight: 10,
@@ -181,7 +181,7 @@ const Domains = () => {
           <button
             onClick={() => handleDelete(record.id)}
             style={{
-              backgroundColor: "red",
+              backgroundColor: "#2a2a2a",
               padding: "5px 15px",
               color: "white",
             }}

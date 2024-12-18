@@ -82,20 +82,21 @@ const RightSidebar = ({
           <p>No emails available for this filter.</p>
         )}
 
-        <div className="pl-52">
+        <div className="pl-44">
           <button
             style={{
               backgroundColor: "#3a3a3a",
               color: "white",
               border: "1px solid white",
+              width: "100px",
               paddingleft: "40px",
               borderRadius: "4px",
-              padding: "8px 16px",
+              padding: "6px 12px",
               cursor: "pointer",
             }}
             onClick={onNext}
           >
-            Next
+            Load more
           </button>
         </div>
       </div>
