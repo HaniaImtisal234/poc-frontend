@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const apiUrl = "/users/login";
 
@@ -30,7 +31,6 @@ const Login = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -41,12 +41,13 @@ const Login = () => {
         email,
         password,
       });
-      console.log("Login successful:", response.data);
+      if (response) {
+        toast.success("Logged In successfully!");
+      }
       localStorage.setItem("token", response.data.token);
       if (response.data.token) {
-        navigate("/home");
+        navigate("/");
       }
-      // Perform further actions (e.g., redirect, save token)
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
     } finally {

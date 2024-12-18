@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input, Button } from "antd";
 import axios from "axios";
+import Header from "../../components/Header/Header";
 
 const Domains = () => {
   const [domains, setDomains] = useState([]);
@@ -9,6 +10,7 @@ const Domains = () => {
   const [totalDomains, setTotalDomains] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [domainName, setDomainName] = useState("");
+  const [domainPrompt, setDomainPrompt] = useState("");
   const [editDomainId, setEditDomainId] = useState(null);
 
   const fetchDomains = async (page) => {
@@ -43,82 +45,99 @@ const Domains = () => {
     fetchDomains(page);
   };
 
-  useEffect(() => {
-    fetchDomains(currentPage);
-  }, [currentPage]);
+  const handleModalVisibility = (edit = false, domain = null) => {
+    console.log(domain);
+    setIsModalVisible(!isModalVisible);
+    if (!isModalVisible) {
+      setDomainName(edit && domain ? domain.domain_name : "");
+      setDomainPrompt(edit && domain ? domain.prompt.prompt_text : "");
+      setEditDomainId(edit && domain ? domain.id : null);
+    } else {
+      setEditDomainId(null);
+      setDomainName("");
+      setDomainPrompt("");
+    }
+  };
 
-  const handleEdit = (record) => {
-    setEditDomainId(record.id);
-    setDomainName(record.domain_name);
-    setIsModalVisible(true);
+  const handleAddDomain = async () => {
+    if (!domainName || !domainPrompt) {
+      message.error("Both Domain Name and Domain Prompt are required");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `/domains`,
+        { domain_name: domainName, prompt_text: domainPrompt },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        message.success("Domain added successfully");
+        setIsModalVisible(false);
+        fetchDomains(currentPage);
+      } else {
+        message.error("Failed to add domain");
+      }
+    } catch (error) {
+      console.error("Error adding domain:", error);
+      message.error(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  const handleEdit = async () => {
+    if (!domainName || !domainPrompt) {
+      message.error("Both Domain Name and Domain Prompt are required");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `/domains/${editDomainId}`,
+        { domain_name: domainName, prompt_text: domainPrompt },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        message.success("Domain updated successfully");
+        setIsModalVisible(false);
+        fetchDomains(currentPage);
+      } else {
+        message.error("Failed to update domain");
+      }
+    } catch (error) {
+      console.error("Error updating domain:", error);
+      message.error(error.response?.data?.message || "An error occurred");
+    }
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`/domains/${id}`, {
+      const response = await axios.delete(`/domains/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      message.success("Domain deleted successfully");
-      fetchDomains(currentPage); // Refresh the domains list
+      if (response.status === 200) {
+        message.success("Domain deleted successfully");
+        fetchDomains(currentPage); // Refresh domain list
+      } else {
+        message.error("Failed to delete domain");
+      }
     } catch (error) {
       console.error("Error deleting domain:", error);
       message.error("Failed to delete domain");
-    }
-  };
-
-  const handleSave = async () => {
-    if (!domainName) {
-      message.error("Domain name is required");
-      return;
-    }
-
-    try {
-      let response;
-      if (editDomainId) {
-        // Edit existing domain
-        response = await axios.put(
-          `/domains/${editDomainId}`,
-          { domain_name: domainName },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-      } else {
-        // Add new domain
-        response = await axios.post(
-          `/domains`,
-          { domain_name: domainName },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-      }
-
-      if (response.status === 200) {
-        message.success(
-          editDomainId
-            ? "Domain updated successfully"
-            : "Domain added successfully"
-        );
-        setIsModalVisible(false); // Close modal
-        fetchDomains(currentPage); // Refresh domains list
-        setDomainName(""); // Clear domain name field
-        setEditDomainId(null); // Reset edit domain ID
-      } else {
-        message.error("Failed to save domain");
-      }
-    } catch (error) {
-      console.error("Error saving domain:", error);
-      message.error("An error occurred while saving the domain");
     }
   };
 
@@ -144,75 +163,84 @@ const Domains = () => {
       key: "actions",
       render: (text, record) => (
         <>
-          <Button
-            onClick={() => handleEdit(record)}
-            style={{ marginRight: 8 }}
-            type="primary"
+          <button
+            onClick={() => {
+              setDomainPrompt(record.prompt_text);
+              handleModalVisibility(true, record);
+            }}
+            style={{
+              backgroundColor: "blue",
+              padding: "5px 15px",
+              color: "white",
+              marginRight: 10,
+            }}
           >
             Edit
-          </Button>
-          <Button onClick={() => handleDelete(record.id)} type="danger">
+          </button>
+          <button
+            onClick={() => handleDelete(record.id)}
+            style={{
+              backgroundColor: "red",
+              padding: "5px 15px",
+              color: "white",
+            }}
+          >
             Delete
-          </Button>
+          </button>
         </>
       ),
     },
   ];
 
+  useEffect(() => {
+    fetchDomains(currentPage);
+  }, [currentPage]);
+
   return (
-    <div style={{ padding: 20 }}>
-      <div style={{ textAlign: "right", marginBottom: 20 }}>
-        <button
-          type="primary"
-          onClick={() => {
-            setDomainName("");
-            setEditDomainId(null);
-            setIsModalVisible(true);
-          }}
-          style={{
-            backgroundColor: "black",
-            borderRadius: 8,
-            paddingRight: "15px",
-            paddingLeft: "15px",
-            paddingTop: "5px",
-            paddingBottom: "5px",
-            color: "white",
-          }}
-        >
-          Add Domain
-        </button>
-      </div>
-
-      {loading ? (
-        <div style={{ textAlign: "center", padding: 20 }}>
-          <Spin size="large" />
+    <div>
+      <Header />
+      <div style={{ padding: 20 }}>
+        <div style={{ textAlign: "right", marginBottom: 20 }}>
+          <button
+            onClick={() => handleModalVisibility(true)}
+            style={{
+              backgroundColor: "black",
+              borderRadius: 8,
+              padding: "5px 15px",
+              color: "white",
+            }}
+          >
+            Add Domain
+          </button>
         </div>
-      ) : (
-        <>
-          <Table
-            dataSource={domains}
-            columns={columns}
-            rowKey={(record) => record.id}
-            pagination={false}
-          />
-          <Pagination
-            current={currentPage}
-            total={totalDomains}
-            pageSize={10}
-            onChange={handlePageChange}
-            style={{ marginTop: 20, textAlign: "right" }}
-          />
-        </>
-      )}
 
-      {isModalVisible && (
+        {loading ? (
+          <div style={{ textAlign: "center", padding: 20 }}>
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            <Table
+              dataSource={domains}
+              columns={columns}
+              rowKey={(record) => record.id}
+              pagination={false}
+            />
+            <Pagination
+              current={currentPage}
+              total={totalDomains}
+              pageSize={10}
+              onChange={handlePageChange}
+              style={{ marginTop: 20, textAlign: "right" }}
+            />
+          </>
+        )}
+
         <Modal
           title={editDomainId ? "Edit Domain" : "Add Domain"}
           open={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          onOk={handleSave}
-          okText="Save"
-          cancelText="Cancel"
+          onCancel={() => handleModalVisibility()}
+          footer={null}
         >
           <div>
             <label>Domain Name:</label>
@@ -222,8 +250,31 @@ const Domains = () => {
               onChange={(e) => setDomainName(e.target.value)}
             />
           </div>
+          <div>
+            <label>Domain Prompt:</label>
+            <Input
+              placeholder="Enter domain prompt"
+              value={domainPrompt}
+              onChange={(e) => setDomainPrompt(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <button
+              onClick={editDomainId ? handleEdit : handleAddDomain}
+              style={{
+                backgroundColor: "black",
+                borderRadius: 8,
+                padding: "5px 15px",
+                color: "white",
+                marginTop: 10,
+              }}
+            >
+              {editDomainId ? "Save Changes" : "Save Domain"}
+            </button>
+          </div>
         </Modal>
-      )}
+      </div>
     </div>
   );
 };

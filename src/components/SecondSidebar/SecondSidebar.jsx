@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Layout, Menu } from "antd";
 import EmailIcon from "@mui/icons-material/Email";
-const { Sider } = Layout;
 
+const { Sider } = Layout;
 const RightSidebar = ({
   className = "bg-yale-blue",
   emails,
   onEmailClick,
-  onClose,
+  onNext,
+  onFilterChange,
 }) => {
+  const [filter, setFilter] = useState("");
+
+  const handleFilterClick = (status) => {
+    setFilter(status);
+    onFilterChange(status);
+  };
+
   return (
     <Sider
       collapsible
@@ -25,25 +33,45 @@ const RightSidebar = ({
       }}
     >
       <div
-        className="flex items-center justify-center bg-yale-blue h-14"
+        className="flex items-center justify-center h-14"
         style={{ backgroundColor: "#2a2a2a" }}
       >
         <h1 className="text-white font-bold text-lg">Email</h1>
       </div>
-
-      <div className="text-white p-2" style={{ backgroundColor: "#2a2a2a" }}>
-        {emails.length > 0 ? (
-          <Menu
-            mode="inline"
-            className="text-white"
-            style={{ width: "100%", backgroundColor: "#2a2a2a" }}
+      <div className="flex justify-around p-2">
+        {["processed", "pending"].map((type) => (
+          <button
+            key={type}
+            style={{
+              backgroundColor: filter === type ? "black" : "transparent",
+              color: "white",
+              border: "1px solid white",
+              borderRadius: "4px",
+              padding: "8px 16px",
+              cursor: "pointer",
+            }}
+            onClick={() => handleFilterClick(type)}
           >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div
+        className="text-white p-2"
+        style={{
+          backgroundColor: "#2a2a2a",
+          maxHeight: "calc(100vh - 160px)",
+          overflowY: "auto",
+        }}
+      >
+        {emails.length > 0 ? (
+          <Menu mode="inline" style={{ backgroundColor: "#2a2a2a" }}>
             {emails.map((email) => (
               <Menu.Item
                 key={email.id}
-                className="hover:bg-gray-500"
                 onClick={() => onEmailClick(email.id)}
-                style={{ color: "white", backgroundColor: "#2a2a2a" }}
+                style={{ color: "white" }}
                 icon={<EmailIcon style={{ color: "white" }} />}
               >
                 {email.subject}
@@ -51,8 +79,25 @@ const RightSidebar = ({
             ))}
           </Menu>
         ) : (
-          <p>No emails available for this date.</p>
+          <p>No emails available for this filter.</p>
         )}
+
+        <div className="pl-52">
+          <button
+            style={{
+              backgroundColor: "#3a3a3a",
+              color: "white",
+              border: "1px solid white",
+              paddingleft: "40px",
+              borderRadius: "4px",
+              padding: "8px 16px",
+              cursor: "pointer",
+            }}
+            onClick={onNext}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </Sider>
   );

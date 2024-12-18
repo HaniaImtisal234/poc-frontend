@@ -2,20 +2,21 @@ import React, { useState, useEffect } from "react";
 import LeftSidebar from "../FirstSidebar/FirstSidebar";
 import RightSidebar from "../SecondSidebar/SecondSidebar";
 import axios from "axios";
-import EmailSection from "../../pages/EmailApproval/EmailApproval"; // Import the EmailSection component
-import Users from "../../pages/Users/Users";
-import Domains from "../../pages/Domains/Domains";
+import EmailSection from "../../pages/EmailApproval/EmailApproval";
 
-const apiUrl = "/get_emails?per_page=5";
-
-async function getEmails() {
+const apiUrl = "/get_emails?date=";
+const dateApiUrl = "/get_email_dates";
+async function getEmails(date, page = 1, status = "") {
   try {
-    const response = await axios.get(apiUrl, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await axios.get(
+      `${apiUrl}${date}&page=${page}&status=${status}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     return response?.data?.data || [];
   } catch (error) {
     console.error("Error:", error.message);
@@ -27,68 +28,90 @@ const Sidebar = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState("Users");
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
   const [groupedEmails, setGroupedEmails] = useState({});
-  const [emailDates, setEmailDates] = useState([]);
-  const [selectedEmail, setSelectedEmail] = useState(null); // Store the selected email
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+  const [dates, setDates] = useState([]);
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("processed");
 
   useEffect(() => {
-    const fetchEmails = async () => {
-      const emails = await getEmails();
-
-      const grouped = emails.reduce((acc, email) => {
-        const date = new Date(email.created_at).toLocaleDateString();
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(email);
-        return acc;
-      }, {});
-
-      const dates = Object.keys(grouped);
-
-      setGroupedEmails(grouped);
-      setEmailDates(dates);
+    const getEmailDates = async () => {
+      try {
+        const response = await axios.get(dateApiUrl, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setDates(response?.data?.email_dates || []);
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
     };
-
-    fetchEmails();
+    getEmailDates();
   }, []);
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchEmails(selectedDate, 1, status);
+    }
+  }, [selectedDate, status]);
+
+  const fetchEmails = async (date, currentPage, status) => {
+    const emails = await getEmails(date, currentPage, status);
+    setGroupedEmails((prevEmails) =>
+      currentPage === 1 ? emails : [...prevEmails, ...emails]
+    );
+    setPage(currentPage);
+  };
 
   const handleLeftSidebarClick = (menuKey) => {
     setSelectedMenuItem(menuKey);
+    setSelectedDate(menuKey);
     setIsRightSidebarOpen(true);
+    setGroupedEmails([]);
+  };
+
+  const handleNextPage = () => {
+    fetchEmails(selectedDate, page + 1, status);
   };
 
   const handleRightSidebarClick = (emailId) => {
-    const email = groupedEmails[selectedMenuItem].find(
-      (email) => email.id === emailId
-    );
-    console.log("🚀 ~ handleRightSidebarClick ~ email:", email);
-    setSelectedEmail(email);
+    const email = groupedEmails.find((email) => email.id === emailId);
+    if (email) {
+      setSelectedEmail(email);
+    } else {
+      console.error("Email not found for the given ID");
+    }
   };
 
   const handleCloseRightSidebar = () => {
     setIsRightSidebarOpen(false);
     setSelectedMenuItem(null);
-
     setSelectedEmail(null);
   };
 
+  const handleFilterChange = (newStatus) => {
+    setStatus(newStatus);
+    setPage(1);
+    setGroupedEmails([]);
+  };
+
   return (
-    <div className="flex ">
-      <LeftSidebar
-        onMenuClick={handleLeftSidebarClick}
-        emailDates={emailDates}
-      />
+    <div className="flex">
+      <LeftSidebar onMenuClick={handleLeftSidebarClick} emailDates={dates} />
 
       {isRightSidebarOpen &&
         selectedMenuItem !== "Domains" &&
         selectedMenuItem !== "Users" && (
           <RightSidebar
-            emails={groupedEmails[selectedMenuItem] || []}
+            emails={groupedEmails}
             onEmailClick={handleRightSidebarClick}
             onClose={handleCloseRightSidebar}
+            onNext={handleNextPage}
+            onFilterChange={handleFilterChange}
           />
         )}
-
-      {selectedMenuItem === "Users" && <Users />}
-      {selectedMenuItem === "Domains" && <Domains />}
 
       {selectedEmail && <EmailSection selectedEmail={selectedEmail} />}
     </div>

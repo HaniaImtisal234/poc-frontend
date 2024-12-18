@@ -6,7 +6,7 @@ const CustomButton = ({
   className = "text-black",
   shape = "default",
   size = "middle",
-  onClick = null,
+  onClick = () => {},
   icon = null,
   isLoading,
 }) => {

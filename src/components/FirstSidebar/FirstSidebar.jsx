@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, Button } from "antd";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import PersonOffOutlined from "@mui/icons-material/PersonOffOutlined";
-import DomainIcon from "@mui/icons-material/Domain";
+
 import { useNavigate } from "react-router-dom";
 
 const { Sider } = Layout;
@@ -22,11 +21,6 @@ const LeftSidebar = ({
     onMenuClick(key);
   };
 
-  const onLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
   const renderMenuItems = () => {
     return (
       <>
@@ -44,30 +38,6 @@ const LeftSidebar = ({
             </div>
           </Menu.Item>
         ))}
-        <Menu.Item
-          key="Users"
-          className={`bg-yale-blue ${
-            activeKey === "Users" ? "ant-menu-item-selected" : ""
-          }`}
-          icon={<PersonOffOutlined style={{ color: "white" }} />}
-          onClick={() => handleMenuClick("Users")}
-        >
-          <div className="flex items-center justify-between">
-            <span>Users</span>
-          </div>
-        </Menu.Item>
-        <Menu.Item
-          key="Domains"
-          className={`bg-yale-blue ${
-            activeKey === "Domains" ? "ant-menu-item-selected" : ""
-          }`}
-          icon={<DomainIcon style={{ color: "white" }} />}
-          onClick={() => handleMenuClick("Domains")}
-        >
-          <div className="flex items-center justify-between">
-            <span>Domains</span>
-          </div>
-        </Menu.Item>
       </>
     );
   };
@@ -101,22 +71,7 @@ const LeftSidebar = ({
           width: "100%",
           padding: "0 16px",
         }}
-      >
-        <button
-          onClick={onLogout}
-          style={{
-            backgroundColor: "red",
-            borderRadius: 8,
-            paddingRight: "15px",
-            paddingLeft: "15px",
-            paddingTop: "5px",
-            paddingBottom: "5px",
-            color: "white",
-          }}
-        >
-          Logout
-        </button>
-      </div>
+      ></div>
     </Sider>
   );
 };

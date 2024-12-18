@@ -1,5 +1,5 @@
 {
-  "proxy": "http://172.16.6.198:5002",
+  "proxy": "http://172.16.6.198:5000",
   "name": "poc-frontend",
   "version": "0.1.0",
   "private": true,
