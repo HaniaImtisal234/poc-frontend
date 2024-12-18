@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input } from "antd";
 import axios from "axios";
+import Header from "../../components/Header/Header";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -70,11 +71,11 @@ const Users = () => {
           },
         }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         message.success("User added successfully");
-        setIsModalVisible(false); // Close modal
-        fetchUsers(currentPage); // Refresh users list
-        clearForm(); // Clear form fields
+        setIsModalVisible(false);
+        fetchUsers(currentPage);
+        clearForm();
       } else {
         message.error("Failed to add user");
       }
@@ -92,20 +93,20 @@ const Users = () => {
 
     try {
       const response = await axios.put(
-        `/users/${editUserId}`, // The URL of the endpoint
-        { email }, // The request body containing the email
+        `/users/${editUserId}`,
+        { email },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Authorization header
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
       if (response.status === 200) {
         message.success("User updated successfully");
-        setIsModalVisible(false); // Close modal
-        fetchUsers(currentPage); // Refresh users list
-        clearForm(); // Clear form fields
+        setIsModalVisible(false);
+        fetchUsers(currentPage);
+        clearForm();
       } else {
         message.error("Failed to update user");
       }
@@ -125,7 +126,7 @@ const Users = () => {
       });
       if (response.status === 200) {
         message.success("User deleted successfully");
-        fetchUsers(currentPage); // Refresh users list
+        fetchUsers(currentPage);
       } else {
         message.error("Failed to delete user");
       }
@@ -138,7 +139,7 @@ const Users = () => {
   const handleModalVisibility = () => {
     setIsModalVisible(!isModalVisible);
     if (!isModalVisible) {
-      clearForm(); // Clear form when modal opens
+      clearForm();
     }
   };
 
@@ -146,7 +147,7 @@ const Users = () => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setEditUserId(null); // Reset editUserId when modal is closed
+    setEditUserId(null);
   };
 
   const columns = [
@@ -175,7 +176,7 @@ const Users = () => {
             onClick={() => {
               setEditUserId(record.id);
               setEmail(record.email);
-              setIsModalVisible(true); // Open modal for editing
+              setIsModalVisible(true);
             }}
             style={{
               backgroundColor: "blue",
@@ -204,96 +205,99 @@ const Users = () => {
   ];
 
   return (
-    <div style={{ padding: 20 }}>
-      <div style={{ textAlign: "right", marginBottom: 20 }}>
-        <button
-          onClick={handleModalVisibility}
-          style={{
-            backgroundColor: "black",
-            borderRadius: 8,
-            paddingRight: "15px",
-            paddingLeft: "15px",
-            paddingTop: "5px",
-            paddingBottom: "5px",
-            color: "white",
-          }}
-        >
-          Add User
-        </button>
-      </div>
-      {loading ? (
-        <div style={{ textAlign: "center", padding: 20 }}>
-          <Spin size="large" />
+    <div>
+      <Header />
+      <div style={{ padding: 20 }}>
+        <div style={{ textAlign: "right", marginBottom: 20 }}>
+          <button
+            onClick={handleModalVisibility}
+            style={{
+              backgroundColor: "black",
+              borderRadius: 8,
+              paddingRight: "15px",
+              paddingLeft: "15px",
+              paddingTop: "5px",
+              paddingBottom: "5px",
+              color: "white",
+            }}
+          >
+            Add User
+          </button>
         </div>
-      ) : (
-        <>
-          <Table
-            dataSource={users}
-            columns={columns}
-            rowKey={(record) => record.id}
-            pagination={false}
-          />
-          <Pagination
-            current={currentPage}
-            total={totalUsers}
-            pageSize={10}
-            onChange={handlePageChange}
-            style={{ marginTop: 20, textAlign: "right" }}
-          />
-        </>
-      )}
-      {isModalVisible && (
-        <Modal
-          title={editUserId ? "Edit User" : "Add User"}
-          open={isModalVisible}
-          onCancel={handleModalVisibility}
-          footer={null}
-        >
-          <div>
-            <label>Email:</label>
-            <Input
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{ marginBottom: 10 }}
-            />
-            {!editUserId && (
-              <>
-                <label>Password:</label>
-                <Input.Password
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ marginBottom: 10 }}
-                />
-                <label>Confirm Password:</label>
-                <Input.Password
-                  placeholder="Confirm password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  style={{ marginBottom: 20 }}
-                />
-              </>
-            )}
-            <div>
-              <button
-                onClick={editUserId ? handleEditUser : handleAddUser}
-                style={{
-                  backgroundColor: "black",
-                  borderRadius: 8,
-                  paddingRight: "15px",
-                  paddingLeft: "15px",
-                  paddingTop: "5px",
-                  paddingBottom: "5px",
-                  color: "white",
-                }}
-              >
-                {editUserId ? "Save Changes" : "Save User"}
-              </button>
-            </div>
+        {loading ? (
+          <div style={{ textAlign: "center", padding: 20 }}>
+            <Spin size="large" />
           </div>
-        </Modal>
-      )}
+        ) : (
+          <>
+            <Table
+              dataSource={users}
+              columns={columns}
+              rowKey={(record) => record.id}
+              pagination={false}
+            />
+            <Pagination
+              current={currentPage}
+              total={totalUsers}
+              pageSize={10}
+              onChange={handlePageChange}
+              style={{ marginTop: 20, textAlign: "right" }}
+            />
+          </>
+        )}
+        {isModalVisible && (
+          <Modal
+            title={editUserId ? "Edit User" : "Add User"}
+            open={isModalVisible}
+            onCancel={handleModalVisibility}
+            footer={null}
+          >
+            <div>
+              <label>Email:</label>
+              <Input
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ marginBottom: 10 }}
+              />
+              {!editUserId && (
+                <>
+                  <label>Password:</label>
+                  <Input.Password
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={{ marginBottom: 10 }}
+                  />
+                  <label>Confirm Password:</label>
+                  <Input.Password
+                    placeholder="Confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    style={{ marginBottom: 20 }}
+                  />
+                </>
+              )}
+              <div>
+                <button
+                  onClick={editUserId ? handleEditUser : handleAddUser}
+                  style={{
+                    backgroundColor: "black",
+                    borderRadius: 8,
+                    paddingRight: "15px",
+                    paddingLeft: "15px",
+                    paddingTop: "5px",
+                    paddingBottom: "5px",
+                    color: "white",
+                  }}
+                >
+                  {editUserId ? "Save Changes" : "Save User"}
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </div>
     </div>
   );
 };
