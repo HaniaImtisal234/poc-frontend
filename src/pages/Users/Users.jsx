@@ -179,7 +179,7 @@ const Users = () => {
               setIsModalVisible(true);
             }}
             style={{
-              backgroundColor: "blue",
+              backgroundColor: "#2a2a2a",
               borderRadius: 8,
               padding: "5px 15px",
               color: "white",
@@ -191,7 +191,7 @@ const Users = () => {
           <button
             onClick={() => handleDeleteUser(record.id)}
             style={{
-              backgroundColor: "red",
+              backgroundColor: "#2a2a2a",
               borderRadius: 8,
               padding: "5px 15px",
               color: "white",
