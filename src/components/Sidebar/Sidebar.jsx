@@ -4,8 +4,8 @@ import RightSidebar from "../SecondSidebar/SecondSidebar";
 import axios from "axios";
 import EmailSection from "../../pages/EmailApproval/EmailApproval";
 
-const apiUrl = "/get_emails?date=";
-const dateApiUrl = "/get_email_dates";
+const apiUrl = "/api/get_emails?date=";
+const dateApiUrl = "/api/get_email_dates";
 async function getEmails(date, page = 1, status = "") {
   try {
     const response = await axios.get(

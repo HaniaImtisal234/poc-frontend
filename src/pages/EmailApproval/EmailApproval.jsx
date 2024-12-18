@@ -9,7 +9,7 @@ const EmailSection = ({ selectedEmail }) => {
   const [emailContent, setEmailContent] = useState();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log(selectedEmail);
+
   useEffect(() => {
     if (selectedEmail && selectedEmail.email_content) {
       setTimeout(() => {
@@ -29,7 +29,7 @@ const EmailSection = ({ selectedEmail }) => {
       const emailId = selectedEmail?.id;
 
       const response = await axios.put(
-        `/emails/${emailId}`,
+        `/api/emails/${emailId}`,
         { status: "accepted" },
         {
           headers: {
@@ -96,7 +96,7 @@ const EmailSection = ({ selectedEmail }) => {
     <div>
       <Header />
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
-        <h1 className="text-center text-3xl font-bold mt-8 mb-8">
+        <h1 className="text-center text-3xl font-bold mt-8 mb-8 break-words max-w-lg mx-auto">
           {emailContent ? emailContent?.subject : "No Subject"}
         </h1>
 

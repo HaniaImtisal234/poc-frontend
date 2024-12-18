@@ -28,12 +28,13 @@ const ForgetPasswordForm = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/users/request-reset-password", {
+      const response = await axios.post("/api/users/request-reset-password", {
         email,
       });
 
       if (response.status === 200) {
         toast.success("Password reset link has been sent to your email!");
+        navigate(LOGIN);
       } else {
         toast.error("Failed to request password reset.");
       }
@@ -54,7 +55,6 @@ const ForgetPasswordForm = () => {
       );
     } finally {
       setLoading(false);
-      navigate(LOGIN);
     }
   };
 
