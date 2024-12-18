@@ -34,6 +34,7 @@ const ForgetPasswordForm = () => {
 
       if (response.status === 200) {
         toast.success("Password reset link has been sent to your email!");
+        navigate(LOGIN);
       } else {
         toast.error("Failed to request password reset.");
       }
@@ -54,7 +55,6 @@ const ForgetPasswordForm = () => {
       );
     } finally {
       setLoading(false);
-      navigate(LOGIN);
     }
   };
 
