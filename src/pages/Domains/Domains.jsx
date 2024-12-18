@@ -18,7 +18,7 @@ const Domains = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `/get_domains?page=${page}&per_page=10`,
+        `/api/get_domains?page=${page}&per_page=10`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -68,7 +68,7 @@ const Domains = () => {
 
     try {
       const response = await axios.post(
-        `/domains`,
+        `/api/domains`,
         { domain_name: domainName, prompt_text: domainPrompt },
         {
           headers: {
@@ -99,7 +99,7 @@ const Domains = () => {
 
     try {
       const response = await axios.put(
-        `/domains/${editDomainId}`,
+        `/api/domains/${editDomainId}`,
         { domain_name: domainName, prompt_text: domainPrompt },
         {
           headers: {
@@ -124,7 +124,7 @@ const Domains = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/domains/${id}`, {
+      const response = await axios.delete(`/api/domains/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -132,7 +132,7 @@ const Domains = () => {
       });
       if (response.status === 200) {
         message.success("Domain deleted successfully");
-        fetchDomains(currentPage); // Refresh domain list
+        fetchDomains(currentPage);
       } else {
         message.error("Failed to delete domain");
       }

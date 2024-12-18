@@ -28,7 +28,7 @@ const ForgetPasswordForm = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/users/request-reset-password", {
+      const response = await axios.post("/api/users/request-reset-password", {
         email,
       });
 

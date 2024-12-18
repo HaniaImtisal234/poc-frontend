@@ -17,7 +17,7 @@ const Users = () => {
   const fetchUsers = async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/users?page=${page}&per_page=10`, {
+      const response = await axios.get(`/api/users?page=${page}&per_page=10`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -59,7 +59,7 @@ const Users = () => {
 
     try {
       const response = await axios.post(
-        "/users",
+        "/api/users",
         {
           email,
           password,
@@ -93,7 +93,7 @@ const Users = () => {
 
     try {
       const response = await axios.put(
-        `/users/${editUserId}`,
+        `/api/users/${editUserId}`,
         { email },
         {
           headers: {
@@ -118,7 +118,7 @@ const Users = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      const response = await axios.delete(`/users/${id}`, {
+      const response = await axios.delete(`/api/users/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
