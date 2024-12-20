@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <div className="" id="custom-dashboard">
       <Layout>
-        <Header />
+        {/* <Header /> */}
         <Content className="h-screen"></Content>
         <AppFooter />
       </Layout>
