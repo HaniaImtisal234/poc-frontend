@@ -51,11 +51,13 @@ const EmailSection = ({ selectedEmail }) => {
   };
 
   const handleReject = async () => {
+    console.log("in rejected");
+    
     try {
       const emailId = selectedEmail?.id;
 
       const response = await axios.put(
-        `/emails/${emailId}`,
+        `/api/emails/${emailId}`,
         { status: "rejected" },
         {
           headers: {
@@ -64,15 +66,24 @@ const EmailSection = ({ selectedEmail }) => {
           },
         }
       );
-
-      if (response.status === 200) {
+console.log("response", response,);
+if (response.status === 200) {
         toast.success("Email rejected successfully!");
-      } else {
+      }else {
         toast.error("Failed to reject the email.");
       }
     } catch (error) {
+console.log("error", error,);
+
+      if( error.status === 401) { // this is to be added in all api calls to handle unauthorized access
+        console.log("in 401");
+        
+        window.location.href = "/login";
+      
+        } 
+             else {
       console.error("Error rejecting email:", error);
-      toast.error("Error rejecting the email.");
+      toast.error("Error rejecting the email.");}
     }
   };
 
@@ -92,9 +103,15 @@ const EmailSection = ({ selectedEmail }) => {
     return <div>No email selected</div>;
   }
 
+  const sanitizeHtml = (html) => {
+    return html.replace(/\\n/g, '').replace(/body {[^}]*}/, '');
+  };
+
+  console.log('parsedAttachments', parsedAttachments);
+
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
         <h1 className="text-center text-3xl font-bold mt-8 mb-8 break-words max-w-lg mx-auto">
           {emailContent ? emailContent?.subject : "No Subject"}
@@ -131,26 +148,41 @@ const EmailSection = ({ selectedEmail }) => {
           <Row gutter={16}>
             {parsedAttachments.length > 0 ? (
               parsedAttachments.map((attachment, index) => (
-                <Col span={8} key={index}>
-                  <div className="attachment-item">
-                    <Image
-                      width={100}
-                      src={attachment.data_uri}
-                      alt={`Attachment ${index + 1}`}
-                      preview={false}
-                      onClick={() => handleImageClick(attachment.data_uri)}
-                    />
+                <>
+                  {attachment?.data_uri && (
+                    <Col span={12} key={index}>
+                      <div className="attachment-item">
+                        <Image
+                          width={100}
+                          src={attachment.data_uri}
+                          alt={`Attachment ${index + 1}`}
+                          preview={false}
+                          onClick={() => handleImageClick(attachment.data_uri)} />
 
-                    {attachment?.document_text && (
-                      <div
-                        className="attachment-text mt-2 text-gray-600 overflow-auto max-h-40 p-4 border border-black-400 rounded-md"
-                        style={{ maxHeight: "150px" }}
-                      >
-                        <p>{attachment?.document_text}</p>
+                        {attachment?.document_text && (
+                          <div
+                            className="attachment-text mt-2 text-gray-600 overflow-auto max-h-40 p-4 border border-black-400 rounded-md"
+                            style={{ maxHeight: "150px" }}
+                          >
+                            <p>{attachment?.document_text}</p>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </Col>
+                    </Col>
+                  )}
+                  {attachment?.document_html && (
+                    <Col span={12} key={index}>
+                      <div style={{ overflow: 'auto', maxHeight: '300px', border: '1px solid #e5e7eb', padding: '10px' }}>
+                        <div dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(
+                            attachment?.document_html
+                          )
+                        }} />
+                      </div>
+                    </Col>
+                  )}
+                </>
+
               ))
             ) : (
               <p>No attachments available</p>
@@ -186,7 +218,6 @@ const EmailSection = ({ selectedEmail }) => {
           </button>
         </div>
       </div>
-
       <Modal
         visible={visible}
         footer={null}

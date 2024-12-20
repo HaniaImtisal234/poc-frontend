@@ -10,16 +10,19 @@ const RightSidebar = ({
   onNext,
   onFilterChange,
 }) => {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("processed");
 
   const handleFilterClick = (status) => {
     setFilter(status);
     onFilterChange(status);
   };
+    const [collapsed, setCollapsed] = useState(false);
+  
 
   return (
     <Sider
       collapsible
+      onCollapse={(value) => setCollapsed(value)}
       breakpoint="md"
       className={className}
       width={300}
@@ -36,18 +39,29 @@ const RightSidebar = ({
         className="flex items-center justify-center h-14"
         style={{ backgroundColor: "#2a2a2a" }}
       >
-        <h1 className="text-white font-bold text-lg">Email</h1>
+        </div><div
+        className="flex items-center justify-center h-14"
+        style={{ backgroundColor: "GrayText", border:"1px solid black" }}
+      >
+        <h1 className="text-black font-bold text-lg">Email</h1>
       </div>
-      <div className="flex justify-around p-2">
-        {["processed", "pending"].map((type) => (
+      <div className="flex justify-center h-14" style={{backgroundColor:"GrayText"}}>
+        {collapsed?<></>:["processed"," ", "pending"].map((type) => (
+          type === " " ?<div  style={{width: "1px",
+            backgroundColor: "black",
+            marginRight:"40px",
+            marginLeft:"40px",
+            }}></div>: 
           <button
+          className="text-black font-bold text-lg"
             key={type}
             style={{
-              backgroundColor: filter === type ? "black" : "transparent",
-              color: "white",
-              border: "1px solid white",
-              borderRadius: "4px",
-              padding: "8px 16px",
+              backgroundColor:  "transparent",
+              color: "black",
+              // border: "1px solid white",
+              borderBottom: filter === type ? "2px solid #3a3a3a" : "none",
+              // borderRadius: "4px",
+              // padding: "8px 16px",
               cursor: "pointer",
             }}
             onClick={() => handleFilterClick(type)}

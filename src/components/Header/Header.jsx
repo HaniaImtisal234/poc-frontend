@@ -6,9 +6,11 @@ import { useState } from "react";
 import { DOMAIN_PAGE, HOME_PAGE, USERS } from "../../constants/Routes.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+ import { useLocation } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -19,6 +21,7 @@ const Header = () => {
   };
 
   return (
+    location?.pathname?.includes("login") ? null : 
     <div className="flex items-center justify-between px-4 py-1 bg-gray-dark sticky top-0 z-10 h-16">
       <>
         <div className="flex items-center gap-8">
