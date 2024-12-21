@@ -16,8 +16,7 @@ const RightSidebar = ({
     setFilter(status);
     onFilterChange(status);
   };
-    const [collapsed, setCollapsed] = useState(false);
-  
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Sider
@@ -38,37 +37,50 @@ const RightSidebar = ({
       <div
         className="flex items-center justify-center h-14"
         style={{ backgroundColor: "#2a2a2a" }}
-      >
-        </div><div
+      ></div>
+      <div
         className="flex items-center justify-center h-14"
-        style={{ backgroundColor: "GrayText", border:"1px solid black" }}
+        style={{ backgroundColor: "GrayText", border: "1px solid black" }}
       >
         <h1 className="text-black font-bold text-lg">Email</h1>
       </div>
-      <div className="flex justify-center h-14" style={{backgroundColor:"GrayText"}}>
-        {collapsed?<></>:["processed"," ", "pending"].map((type) => (
-          type === " " ?<div  style={{width: "1px",
-            backgroundColor: "black",
-            marginRight:"40px",
-            marginLeft:"40px",
-            }}></div>: 
-          <button
-          className="text-black font-bold text-lg"
-            key={type}
-            style={{
-              backgroundColor:  "transparent",
-              color: "black",
-              // border: "1px solid white",
-              borderBottom: filter === type ? "2px solid #3a3a3a" : "none",
-              // borderRadius: "4px",
-              // padding: "8px 16px",
-              cursor: "pointer",
-            }}
-            onClick={() => handleFilterClick(type)}
-          >
-            {type.charAt(0).toUpperCase() + type.slice(1)}
-          </button>
-        ))}
+      <div
+        className="flex justify-center h-14"
+        style={{ backgroundColor: "GrayText" }}
+      >
+        {collapsed ? (
+          <></>
+        ) : (
+          ["processed", " ", "pending"].map((type) =>
+            type === " " ? (
+              <div
+                style={{
+                  width: "1px",
+                  backgroundColor: "black",
+                  marginRight: "40px",
+                  marginLeft: "40px",
+                }}
+              ></div>
+            ) : (
+              <button
+                className="text-black font-bold text-lg"
+                key={type}
+                style={{
+                  backgroundColor: "transparent",
+                  color: "black",
+                  // border: "1px solid white",
+                  borderBottom: filter === type ? "2px solid #3a3a3a" : "none",
+                  // borderRadius: "4px",
+                  // padding: "8px 16px",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleFilterClick(type)}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            )
+          )
+        )}
       </div>
 
       <div

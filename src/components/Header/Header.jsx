@@ -6,7 +6,7 @@ import { useState } from "react";
 import { DOMAIN_PAGE, HOME_PAGE, USERS } from "../../constants/Routes.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
- import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,8 +20,9 @@ const Header = () => {
     navigate("/login");
   };
 
-  return (
-    location?.pathname?.includes("login") ? null : 
+  return location?.pathname?.includes("login") ||
+    location?.pathname?.includes("forget-password-form") ||
+    location?.pathname?.includes("ForgetPassword") ? null : (
     <div className="flex items-center justify-between px-4 py-1 bg-gray-dark sticky top-0 z-10 h-16">
       <>
         <div className="flex items-center gap-8">

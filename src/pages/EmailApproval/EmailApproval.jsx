@@ -51,8 +51,6 @@ const EmailSection = ({ selectedEmail }) => {
   };
 
   const handleReject = async () => {
-    console.log("in rejected");
-    
     try {
       const emailId = selectedEmail?.id;
 
@@ -66,24 +64,21 @@ const EmailSection = ({ selectedEmail }) => {
           },
         }
       );
-console.log("response", response,);
-if (response.status === 200) {
+
+      if (response.status === 200) {
         toast.success("Email rejected successfully!");
-      }else {
+      } else {
         toast.error("Failed to reject the email.");
       }
     } catch (error) {
-console.log("error", error,);
+      console.log("error", error);
 
-      if( error.status === 401) { // this is to be added in all api calls to handle unauthorized access
-        console.log("in 401");
-        
+      if (error.status === 401) {
         window.location.href = "/login";
-      
-        } 
-             else {
-      console.error("Error rejecting email:", error);
-      toast.error("Error rejecting the email.");}
+      } else {
+        console.error("Error rejecting email:", error);
+        toast.error("Error rejecting the email.");
+      }
     }
   };
 
@@ -104,10 +99,10 @@ console.log("error", error,);
   }
 
   const sanitizeHtml = (html) => {
-    return html.replace(/\\n/g, '').replace(/body {[^}]*}/, '');
+    return html.replace(/\\n/g, "").replace(/body {[^}]*}/, "");
   };
 
-  console.log('parsedAttachments', parsedAttachments);
+  console.log("parsedAttachments", parsedAttachments);
 
   return (
     <div>
@@ -157,7 +152,8 @@ console.log("error", error,);
                           src={attachment.data_uri}
                           alt={`Attachment ${index + 1}`}
                           preview={false}
-                          onClick={() => handleImageClick(attachment.data_uri)} />
+                          onClick={() => handleImageClick(attachment.data_uri)}
+                        />
 
                         {attachment?.document_text && (
                           <div
@@ -172,17 +168,23 @@ console.log("error", error,);
                   )}
                   {attachment?.document_html && (
                     <Col span={12} key={index}>
-                      <div style={{ overflow: 'auto', maxHeight: '300px', border: '1px solid #e5e7eb', padding: '10px' }}>
-                        <div dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(
-                            attachment?.document_html
-                          )
-                        }} />
+                      <div
+                        style={{
+                          overflow: "auto",
+                          maxHeight: "300px",
+                          border: "1px solid #e5e7eb",
+                          padding: "10px",
+                        }}
+                      >
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(attachment?.document_html),
+                          }}
+                        />
                       </div>
                     </Col>
                   )}
                 </>
-
               ))
             ) : (
               <p>No attachments available</p>
