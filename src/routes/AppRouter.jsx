@@ -19,28 +19,22 @@ import ForgetPasswordForm from "../pages/ForgetPasswordForm/ForgetPasswordForm";
 import PrivateRoute from "./helper";
 import Header from "../components/Header/Header";
 
-
 const AppRouter = () => {
- 
-
   return (
     <div>
-
       <BrowserRouter>
-<Header/>
+        <Header />
         <Routes>
-        <Route path={LOGIN} element={<Login />} />
-
-          <Route element={<PrivateRoute />}>
-          <Route path={HOME_PAGE} element={<HomePage />} />
-          <Route path={LANDING_PAGE} element={<LandingPage />} />
-          <Route path={USERS} element={<Users />} />
-          <Route path={DOMAIN_PAGE} element={<Domains />} />
+          <Route path={LOGIN} element={<Login />} />
           <Route path={FORGET_PASSWORD_FORM} element={<ForgetPasswordForm />} />
           <Route path={FORGET_PASSWORD} element={<ForgetPassword />} />
+          <Route element={<PrivateRoute />}>
+            <Route path={HOME_PAGE} element={<HomePage />} />
+            <Route path={LANDING_PAGE} element={<LandingPage />} />
+            <Route path={USERS} element={<Users />} />
+            <Route path={DOMAIN_PAGE} element={<Domains />} />
           </Route>
         </Routes>
-
       </BrowserRouter>
     </div>
   );

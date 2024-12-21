@@ -53,10 +53,15 @@ const LeftSidebar = ({
     >
       <div className="flex items-center justify-center h-14 ">
         <h1 className="text-white font-bold text-lg">POC</h1>
-      </div><div className="flex items-center justify-center h-14 " style={{backgroundColor:"GrayText"}}>
-        <button className="text-black font-bold text-lg"  disabled={true}>DATES</button>
       </div>
-      
+      <div
+        className="flex items-center justify-center h-14 "
+        style={{ backgroundColor: "GrayText" }}
+      >
+        <button className="text-black font-bold text-lg" disabled={true}>
+          DATES
+        </button>
+      </div>
 
       <Menu
         mode="inline"
