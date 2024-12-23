@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input } from "antd";
 import axios from "axios";
 import Header from "../../components/Header/Header";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -13,6 +14,8 @@ const Users = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [editUserId, setEditUserId] = useState(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState("");
+  const [userToDelete, setUserToDelete] = useState(null);
 
   const fetchUsers = async (page) => {
     setLoading(true);
@@ -49,21 +52,19 @@ const Users = () => {
 
   const handleAddUser = async () => {
     if (!email || !password || !confirmPassword) {
-      message.error("All fields are required");
+      toast.error("All fields are required");
       return;
     }
+
     if (password !== confirmPassword) {
-      message.error("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     try {
       const response = await axios.post(
         "/api/users",
-        {
-          email,
-          password,
-        },
+        { email, password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,17 +72,25 @@ const Users = () => {
           },
         }
       );
+
       if (response.status === 201) {
-        message.success("User added successfully");
+        toast.success("User added successfully");
         setIsModalVisible(false);
         fetchUsers(currentPage);
         clearForm();
       } else {
-        message.error("Failed to add user");
+        toast.error("Failed to add user");
       }
     } catch (error) {
       console.error("Error adding user:", error);
-      message.error(error.response?.data?.message || "An error occurred");
+
+      if (!error.response) {
+        toast.error("Network error. Please try again later.");
+        return;
+      }
+
+      const errorMessage = error.response.data?.error || "An error occurred";
+      toast.error(errorMessage);
     }
   };
 
@@ -116,29 +125,43 @@ const Users = () => {
     }
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+
     try {
-      const response = await axios.delete(`/api/users/${id}`, {
+      const response = await axios.delete(`/api/users/${userToDelete.id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       if (response.status === 200) {
-        message.success("User deleted successfully");
-        fetchUsers(currentPage);
+        toast.success("User deleted successfully");
+        setIsDeleteModalVisible(false);
+
+        setTimeout(() => {
+          fetchUsers(currentPage);
+        }, 1500);
       } else {
-        message.error("Failed to delete user");
+        toast.error("Failed to delete user");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
-      message.error("An error occurred while deleting the user");
+      toast.error("An error occurred while deleting the user");
     }
   };
 
   const handleModalVisibility = () => {
     setIsModalVisible(!isModalVisible);
     if (!isModalVisible) {
+      clearForm();
+    }
+  };
+
+  const handleDeleteModalVisibility = () => {
+    setIsDeleteModalVisible(!isDeleteModalVisible);
+    if (!isDeleteModalVisible) {
       clearForm();
     }
   };
@@ -189,7 +212,10 @@ const Users = () => {
             Edit
           </button>
           <button
-            onClick={() => handleDeleteUser(record.id)}
+            onClick={() => {
+              setUserToDelete(record);
+              setIsDeleteModalVisible(true);
+            }}
             style={{
               backgroundColor: "#2a2a2a",
               borderRadius: 8,
@@ -206,7 +232,6 @@ const Users = () => {
 
   return (
     <div>
-      {/* <Header /> */}
       <div style={{ padding: 20 }}>
         <div style={{ textAlign: "right", marginBottom: 20 }}>
           <button
@@ -245,6 +270,21 @@ const Users = () => {
             />
           </>
         )}
+        {isDeleteModalVisible && (
+          <Modal
+            title="Confirm Deletion"
+            open={isDeleteModalVisible}
+            onCancel={handleDeleteModalVisibility}
+            onOk={() => {
+              handleDeleteUser();
+              handleDeleteModalVisibility();
+            }}
+            destroyOnClose={true}
+          >
+            <p>Are you sure you want to delete this user?</p>
+          </Modal>
+        )}
+
         {isModalVisible && (
           <Modal
             title={editUserId ? "Edit User" : "Add User"}

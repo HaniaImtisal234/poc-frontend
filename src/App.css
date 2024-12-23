@@ -165,3 +165,11 @@
   padding: 12px;
   border-radius: 8px;
 }
+
+/* Style for disabled buttons */
+button:disabled {
+  background-color: #d1d1d1; /* Light grey background */
+  color: #a1a1a1; /* Light grey text */
+  cursor: not-allowed; /* Change cursor to indicate non-interactivity */
+  opacity: 0.6; /* Reduce opacity for a faded look */
+}

@@ -12,6 +12,7 @@ const EmailSection = ({ selectedEmail }) => {
 
   useEffect(() => {
     if (selectedEmail && selectedEmail.email_content) {
+      console.log("🚀 ~ useEffect ~ selectedEmail:", selectedEmail);
       setTimeout(() => {
         try {
           const parsedContent = JSON.parse(selectedEmail.email_content);
@@ -108,7 +109,7 @@ const EmailSection = ({ selectedEmail }) => {
     <div>
       {/* <Header /> */}
       <div className="flex flex-col bg-gray-100 p-8 rounded-lg shadow-lg">
-        <h1 className="text-center text-3xl font-bold mt-8 mb-8 break-words max-w-lg mx-auto">
+        <h1 className="text-center text-3xl font-bold mt-8 mb-8 break-all max-w-lg mx-auto">
           {emailContent ? emailContent?.subject : "No Subject"}
         </h1>
 
@@ -209,12 +210,14 @@ const EmailSection = ({ selectedEmail }) => {
           <button
             className="bg-yale-blue text-white text-lg px-6 py-2 rounded-lg"
             onClick={handleAccept}
+            disabled={selectedEmail.status === "pending"}
           >
             Accept
           </button>
           <button
             className="bg-yale-blue text-white text-lg px-6 py-2 rounded-lg ml-4"
             onClick={handleReject}
+            disabled={selectedEmail.status === "pending"}
           >
             Reject
           </button>

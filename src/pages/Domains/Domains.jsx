@@ -13,6 +13,7 @@ const Domains = () => {
   const [domainName, setDomainName] = useState("");
   const [domainPrompt, setDomainPrompt] = useState("");
   const [editDomainId, setEditDomainId] = useState(null);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState("");
 
   const fetchDomains = async (page) => {
     setLoading(true);
@@ -132,7 +133,11 @@ const Domains = () => {
       });
       if (response.status === 200) {
         message.success("Domain deleted successfully");
-        fetchDomains(currentPage);
+        setIsDeleteModalVisible(false);
+
+        setTimeout(() => {
+          fetchDomains(currentPage);
+        }, 1500);
       } else {
         message.error("Failed to delete domain");
       }
@@ -140,6 +145,10 @@ const Domains = () => {
       console.error("Error deleting domain:", error);
       message.error("Failed to delete domain");
     }
+  };
+
+  const handleDeleteModalVisibility = () => {
+    setIsDeleteModalVisible(!isDeleteModalVisible);
   };
 
   const columns = [
@@ -235,6 +244,20 @@ const Domains = () => {
               style={{ marginTop: 20, textAlign: "right" }}
             />
           </>
+        )}
+        {isDeleteModalVisible && (
+          <Modal
+            title="Confirm Deletion"
+            open={isDeleteModalVisible}
+            onCancel={handleDeleteModalVisibility}
+            onOk={() => {
+              handleDelete();
+              handleDeleteModalVisibility();
+            }}
+            destroyOnClose={true}
+          >
+            <p>Are you sure you want to delete this user?</p>
+          </Modal>
         )}
 
         <Modal
