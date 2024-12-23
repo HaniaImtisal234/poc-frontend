@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
-
+import LogoutIcon from "@mui/icons-material/Logout";
 import { DOMAIN_PAGE, HOME_PAGE, USERS } from "../../constants/Routes.js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -58,14 +58,14 @@ const Header = () => {
                 backgroundColor: "black",
                 borderRadius: 6,
                 height: "36px",
-                paddingRight: "15px",
-                paddingLeft: "15px",
+                paddingRight: "8px",
+                paddingLeft: "10px",
                 paddingTop: "5px",
                 paddingBottom: "5px",
                 color: "white",
               }}
             >
-              Logout
+              <LogoutIcon style={{ color: "white", fontSize: 24 }} />
             </button>
           </div>
           <div className="xs:hidden md:flex items-center gap-1 xs:gap-1 mx-2 ">
