@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const ForgetPassword = () => {
   const [password, setPassword] = useState("");
@@ -36,7 +37,7 @@ const ForgetPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/users/reset-password", {
+      const response = await fetch(`${baseUrl}/users/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

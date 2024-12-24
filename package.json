@@ -1,5 +1,4 @@
 {
-  "proxy": "http://172.16.6.198:5000",
   "devServer": {
     "allowedHosts": "all"
   },

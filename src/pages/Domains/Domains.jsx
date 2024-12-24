@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input, Button } from "antd";
 import axios from "axios";
 import Header from "../../components/Header/Header";
+import { toast } from "react-toastify";
 const { TextArea } = Input;
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const Domains = () => {
   const [domains, setDomains] = useState([]);
@@ -14,12 +16,13 @@ const Domains = () => {
   const [domainPrompt, setDomainPrompt] = useState("");
   const [editDomainId, setEditDomainId] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState("");
-
+  const [domainToDelete, setDomainToDelete] = useState(null);
+  console.log(baseUrl);
   const fetchDomains = async (page) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `/api/get_domains?page=${page}&per_page=10`,
+        `${baseUrl}/get_domains?page=${page}&per_page=10`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -69,7 +72,7 @@ const Domains = () => {
 
     try {
       const response = await axios.post(
-        `/api/domains`,
+        `${baseUrl}/domains`,
         { domain_name: domainName, prompt_text: domainPrompt },
         {
           headers: {
@@ -100,7 +103,7 @@ const Domains = () => {
 
     try {
       const response = await axios.put(
-        `/api/domains/${editDomainId}`,
+        `${baseUrl}/domains/${editDomainId}`,
         { domain_name: domainName, prompt_text: domainPrompt },
         {
           headers: {
@@ -111,7 +114,7 @@ const Domains = () => {
       );
 
       if (response.status === 200) {
-        message.success("Domain updated successfully");
+        toast.success("Domain updated successfully");
         setIsModalVisible(false);
         fetchDomains(currentPage);
       } else {
@@ -123,27 +126,29 @@ const Domains = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      const response = await axios.delete(`/api/domains/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.delete(
+        `${baseUrl}/domains/${domainToDelete.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       if (response.status === 200) {
-        message.success("Domain deleted successfully");
+        toast.success("Domain deleted successfully");
         setIsDeleteModalVisible(false);
-
         setTimeout(() => {
           fetchDomains(currentPage);
         }, 1500);
       } else {
-        message.error("Failed to delete domain");
+        toast.error("Failed to delete domain");
       }
     } catch (error) {
       console.error("Error deleting domain:", error);
-      message.error("Failed to delete domain");
+      toast.error("Failed to delete domain");
     }
   };
 
@@ -188,7 +193,10 @@ const Domains = () => {
             Edit
           </button>
           <button
-            onClick={() => handleDelete(record.id)}
+            onClick={() => {
+              setDomainToDelete(record);
+              setIsDeleteModalVisible(true);
+            }}
             style={{
               backgroundColor: "#2a2a2a",
               padding: "5px 15px",
@@ -251,55 +259,57 @@ const Domains = () => {
             open={isDeleteModalVisible}
             onCancel={handleDeleteModalVisibility}
             onOk={() => {
-              handleDelete();
-              handleDeleteModalVisibility();
+              handleDelete(editDomainId); // Use editDomainId here
+              setIsDeleteModalVisible(false); // Close the modal after deletion
             }}
             destroyOnClose={true}
           >
-            <p>Are you sure you want to delete this user?</p>
+            <p>Are you sure you want to delete this domain?</p>
           </Modal>
         )}
 
-        <Modal
-          title={editDomainId ? "Edit Domain" : "Add Domain"}
-          open={isModalVisible}
-          onCancel={() => handleModalVisibility()}
-          footer={null}
-        >
-          <div>
-            <label>Domain Name:</label>
-            <Input
-              placeholder="Enter domain name"
-              value={domainName}
-              onChange={(e) => setDomainName(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>Domain Prompt:</label>
-            <TextArea
-              placeholder="Enter domain prompt"
-              value={domainPrompt}
-              onChange={(e) => setDomainPrompt(e.target.value)}
-              rows={5}
-              className="custom-textarea"
-            />
-          </div>
+        {isModalVisible && (
+          <Modal
+            title={editDomainId ? "Edit Domain" : "Add Domain"}
+            open={isModalVisible}
+            onCancel={() => handleModalVisibility()}
+            footer={null}
+          >
+            <div>
+              <label>Domain Name:</label>
+              <Input
+                placeholder="Enter domain name"
+                value={domainName}
+                onChange={(e) => setDomainName(e.target.value)}
+              />
+            </div>
+            <div>
+              <label>Domain Prompt:</label>
+              <TextArea
+                placeholder="Enter domain prompt"
+                value={domainPrompt}
+                onChange={(e) => setDomainPrompt(e.target.value)}
+                rows={5}
+                className="custom-textarea"
+              />
+            </div>
 
-          <div>
-            <button
-              onClick={editDomainId ? handleEdit : handleAddDomain}
-              style={{
-                backgroundColor: "black",
-                borderRadius: 8,
-                padding: "5px 15px",
-                color: "white",
-                marginTop: 10,
-              }}
-            >
-              {editDomainId ? "Save Changes" : "Save Domain"}
-            </button>
-          </div>
-        </Modal>
+            <div>
+              <button
+                onClick={editDomainId ? handleEdit : handleAddDomain}
+                style={{
+                  backgroundColor: "black",
+                  borderRadius: 8,
+                  padding: "5px 15px",
+                  color: "white",
+                  marginTop: 10,
+                }}
+              >
+                {editDomainId ? "Save Changes" : "Save Domain"}
+              </button>
+            </div>
+          </Modal>
+        )}
       </div>
     </div>
   );
