@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Table, Pagination, Spin, message, Modal, Input } from "antd";
 import axios from "axios";
-import Header from "../../components/Header/Header";
+
 import { toast } from "react-toastify";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -20,12 +21,15 @@ const Users = () => {
   const fetchUsers = async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/users?page=${page}&per_page=10`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `${baseUrl}/users?page=${page}&per_page=10`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.data && response.data.data) {
         setUsers(response.data.data);
@@ -63,7 +67,7 @@ const Users = () => {
 
     try {
       const response = await axios.post(
-        "/api/users",
+        `${baseUrl}/users`,
         { email, password },
         {
           headers: {
@@ -102,7 +106,7 @@ const Users = () => {
 
     try {
       const response = await axios.put(
-        `/api/users/${editUserId}`,
+        `${baseUrl}/users/${editUserId}`,
         { email },
         {
           headers: {
@@ -129,12 +133,15 @@ const Users = () => {
     if (!userToDelete) return;
 
     try {
-      const response = await axios.delete(`/api/users/${userToDelete.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.delete(
+        `${baseUrl}/users/${userToDelete.id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         toast.success("User deleted successfully");

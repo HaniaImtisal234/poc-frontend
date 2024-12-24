@@ -3,9 +3,10 @@ import LeftSidebar from "../FirstSidebar/FirstSidebar";
 import RightSidebar from "../SecondSidebar/SecondSidebar";
 import axios from "axios";
 import EmailSection from "../../pages/EmailApproval/EmailApproval";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-const apiUrl = "/api/get_emails?date=";
-const dateApiUrl = "/api/get_email_dates";
+const apiUrl = `${baseUrl}/get_emails?date=`;
+const dateApiUrl = `${baseUrl}/get_email_dates`;
 async function getEmails(date, page = 1, status = "") {
   try {
     const response = await axios.get(

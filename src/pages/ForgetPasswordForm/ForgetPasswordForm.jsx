@@ -3,6 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { LOGIN } from "../../constants/Routes";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const ForgetPasswordForm = () => {
   const [email, setEmail] = useState("");
@@ -28,9 +29,12 @@ const ForgetPasswordForm = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("/api/users/request-reset-password", {
-        email,
-      });
+      const response = await axios.post(
+        `${baseUrl}/users/request-reset-password`,
+        {
+          email,
+        }
+      );
 
       if (response.status === 200) {
         toast.success("Password reset link has been sent to your email!");

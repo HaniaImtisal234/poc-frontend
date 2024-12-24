@@ -3,8 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FORGET_PASSWORD_FORM } from "../../constants/Routes";
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-const apiUrl = "/api/users/login";
+const apiUrl = `${baseUrl}/users/login`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
