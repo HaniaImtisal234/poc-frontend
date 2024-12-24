@@ -54,7 +54,7 @@ const Login = () => {
       }
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || "Login failed. Please try again.";
+        error.response?.data?.error || "Login failed. Please try again.";
       toast.error(errorMessage);
       console.error("Login failed:", error.response?.data || error.message);
     } finally {

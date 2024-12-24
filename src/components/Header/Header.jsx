@@ -22,7 +22,8 @@ const Header = () => {
 
   return location?.pathname?.includes("login") ||
     location?.pathname?.includes("forget-password-form") ||
-    location?.pathname?.includes("ForgetPassword") ? null : (
+    location?.pathname?.includes("ForgetPassword") ||
+    (location?.pathname?.includes("forget-password") && location?.search?.includes("token")) ? null : (
     <div className="flex items-center justify-between px-4 py-1 bg-gray-dark sticky top-0 z-10 h-16">
       <>
         <div className="flex items-center gap-8">
