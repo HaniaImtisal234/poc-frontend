@@ -58,6 +58,10 @@ const Sidebar = () => {
     }
   }, [selectedDate, status]);
 
+  const handleActionComplete = () => {
+    fetchEmails(selectedDate, 1, status);
+  };
+
   const fetchEmails = async (date, currentPage, status) => {
     const emails = await getEmails(date, currentPage, status);
     setGroupedEmails((prevEmails) =>
@@ -114,7 +118,12 @@ const Sidebar = () => {
           />
         )}
 
-      {selectedEmail && <EmailSection selectedEmail={selectedEmail} />}
+      {selectedEmail && (
+        <EmailSection
+          selectedEmail={selectedEmail}
+          onActionComplete={handleActionComplete}
+        />
+      )}
     </div>
   );
 };

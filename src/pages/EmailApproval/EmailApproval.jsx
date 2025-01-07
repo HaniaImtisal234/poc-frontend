@@ -5,7 +5,7 @@ import { Modal, Image, Row, Col } from "antd";
 import axios from "axios";
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-const EmailSection = ({ selectedEmail }) => {
+const EmailSection = ({ selectedEmail, onActionComplete }) => {
   const [emailContent, setEmailContent] = useState();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -27,7 +27,6 @@ const EmailSection = ({ selectedEmail }) => {
 
   useEffect(() => {
     if (selectedEmail?.id) {
-      console.log(selectedEmail?.id);
       const fetchAttachments = async () => {
         try {
           const response = await axios.get(
@@ -83,6 +82,7 @@ const EmailSection = ({ selectedEmail }) => {
 
       if (response.status === 200) {
         toast.success("Email accepted successfully!");
+        onActionComplete();
       } else {
         toast.error("Failed to accept the email.");
       }
@@ -108,6 +108,7 @@ const EmailSection = ({ selectedEmail }) => {
 
       if (response.status === 200) {
         toast.success("Email rejected successfully!");
+        onActionComplete();
       } else {
         toast.error("Failed to reject the email.");
       }
@@ -244,14 +245,20 @@ const EmailSection = ({ selectedEmail }) => {
           <button
             className="bg-yale-blue text-white text-lg px-6 py-2 rounded-lg"
             onClick={handleAccept}
-            disabled={selectedEmail.status === "pending"}
+            disabled={
+              selectedEmail.status === "pending" ||
+              selectedEmail.status === "rejected"
+            }
           >
             Accept
           </button>
           <button
             className="bg-yale-blue text-white text-lg px-6 py-2 rounded-lg ml-4"
             onClick={handleReject}
-            disabled={selectedEmail.status === "pending"}
+            disabled={
+              selectedEmail.status === "pending" ||
+              selectedEmail.status === "rejected"
+            }
           >
             Reject
           </button>
