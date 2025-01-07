@@ -52,6 +52,7 @@ const Sidebar = () => {
     getEmailDates();
   }, []);
 
+  console.log(selectedEmail);
   useEffect(() => {
     if (selectedDate) {
       fetchEmails(selectedDate, 1, status);
@@ -86,6 +87,7 @@ const Sidebar = () => {
     if (email) {
       setSelectedEmail(email);
     } else {
+      setSelectedEmail(null);
       console.error("Email not found for the given ID");
     }
   };
@@ -98,9 +100,11 @@ const Sidebar = () => {
 
   const handleFilterChange = (newStatus) => {
     setStatus(newStatus);
+    setSelectedEmail(null);
     setPage(1);
     setGroupedEmails([]);
   };
+  console.log(selectedEmail);
 
   return (
     <div className="flex">
@@ -118,7 +122,7 @@ const Sidebar = () => {
           />
         )}
 
-      {selectedEmail && (
+      {selectedEmail && groupedEmails && (
         <EmailSection
           selectedEmail={selectedEmail}
           onActionComplete={handleActionComplete}
