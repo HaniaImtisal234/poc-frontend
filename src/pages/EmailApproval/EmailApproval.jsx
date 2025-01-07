@@ -5,7 +5,11 @@ import { Modal, Image, Row, Col } from "antd";
 import axios from "axios";
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-const EmailSection = ({ selectedEmail, noEmails }) => {
+const EmailSection = ({
+  selectedEmail,
+  onActionComplete,
+  setSelectedEmail,
+}) => {
   const [emailContent, setEmailContent] = useState();
   const [visible, setVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -83,6 +87,8 @@ const EmailSection = ({ selectedEmail, noEmails }) => {
 
       if (response.status === 200) {
         toast.success("Email accepted successfully!");
+        onActionComplete();
+        setSelectedEmail(null);
       } else {
         toast.error("Failed to accept the email.");
       }
@@ -108,6 +114,8 @@ const EmailSection = ({ selectedEmail, noEmails }) => {
 
       if (response.status === 200) {
         toast.success("Email rejected successfully!");
+        onActionComplete();
+        setSelectedEmail(null);
       } else {
         toast.error("Failed to reject the email.");
       }

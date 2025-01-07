@@ -52,7 +52,6 @@ const Sidebar = () => {
     getEmailDates();
   }, []);
 
-  console.log(selectedEmail);
   useEffect(() => {
     if (selectedDate) {
       fetchEmails(selectedDate, 1, status);
@@ -126,6 +125,7 @@ const Sidebar = () => {
         <EmailSection
           selectedEmail={selectedEmail}
           onActionComplete={handleActionComplete}
+          setSelectedEmail={setSelectedEmail}
         />
       )}
     </div>
